@@ -13,7 +13,8 @@ set(PROJECT_ROOT_DIR  ${PROJECT_SOURCE_DIR}        CACHE STRING "PROJECT_ROOT_DI
 set(BUILD_ROOT_DIR    ${CMAKE_CURRENT_BINARY_DIR}  CACHE STRING "BUILD_ROOT_DIR")
 set(DIST_DIR          ${BUILD_ROOT_DIR}/dist       CACHE STRING "DIST_DIR")
 
-file(GLOB C_SOURCE ${PROJECT_ROOT_DIR}/src/*.c CACHE STRING "C_SOURCE")
+file(GLOB C_SOURCE ${PROJECT_ROOT_DIR}/src/*.c)
+file(GLOB CPP_SOURCE ${PROJECT_ROOT_DIR}/src/*.cpp)
 
 # Build Release by default
 set(CMAKE_BUILD_TYPE Release CACHE STRING "Build Type")
@@ -23,7 +24,7 @@ add_custom_command(
   OUTPUT game.out
   COMMAND rm -rf ${DIST_DIR}
   COMMAND mkdir  ${DIST_DIR}
-  COMMAND gcc ${C_SOURCE} -o ${DIST_DIR}/game.out -lSDL2
+  COMMAND gcc ${C_SOURCE} ${CPP_SOURCE} -o ${DIST_DIR}/game.out -lSDL2
   VERBATIM
 )
 add_custom_target(CGameSandbox ALL DEPENDS game.out)

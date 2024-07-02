@@ -1,5 +1,5 @@
 ## Overview
-This project is a sandbox for me to learn SDL and C/C++ better.
+This project is a sandbox for me to learn CMake, SDL and C/C++ better.
 
 ## Dependencies:
 - CMake
