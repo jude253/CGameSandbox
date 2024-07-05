@@ -13,6 +13,11 @@ void initSDL(void)
 
     windowFlags = 0;
 
+    // Initialize app data before game starts.
+    app.frameStart = 0;
+    app.renderFrameSeconds = 0.0f;
+    app.fps = 0.0f;
+    
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
         printf("Couldn't initialize SDL: %s\n", SDL_GetError());

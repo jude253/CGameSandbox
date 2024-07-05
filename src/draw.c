@@ -7,6 +7,8 @@ const int SCREEN_DIVISOR = 10;
 const int RECT_HEIGHT = SCREEN_HEIGHT / SCREEN_DIVISOR;
 const int RECT_WIDTH = SCREEN_WIDTH / SCREEN_DIVISOR;
 
+SDL_Point mouse_position;
+
 void prepareScene(void)
 {
     SDL_SetRenderDrawColor(app.renderer, 96, 128, 255, 255);
@@ -67,6 +69,21 @@ void presentScene(void)
         SCREEN_WIDTH-RECT_WIDTH, SCREEN_HEIGHT-RECT_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT
     );
 
+    SDL_GetMouseState(
+        &mouse_position.x,
+        &mouse_position.y
+    );
+
+    SDL_Rect rect;
+    rect.x = mouse_position.x;
+    rect.y = mouse_position.y;
+    rect.w = RECT_WIDTH;
+    rect.h = RECT_HEIGHT;
+
+    SDL_RenderDrawRect(app.renderer, &rect);
+    SDL_Log("Mouse position: x=%i y=%i",
+        mouse_position.x, mouse_position.y
+    );
 
     SDL_RenderPresent(app.renderer);
 }
