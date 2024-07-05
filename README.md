@@ -36,3 +36,10 @@ make
 ```
 ./build/dist/game.out
 ```
+
+## One Line Command
+
+Run from `build` directory
+```
+cmake .. && make && dist/game.out
+```
