@@ -2,12 +2,11 @@
 #include <SDL2/SDL.h>
 #include "init.h"
 #include "defs.h"
+#include "input.h"
 
 const int SCREEN_DIVISOR = 10;
 const int RECT_HEIGHT = SCREEN_HEIGHT / SCREEN_DIVISOR;
 const int RECT_WIDTH = SCREEN_WIDTH / SCREEN_DIVISOR;
-
-SDL_Point mouse_position;
 
 void prepareScene(void)
 {
@@ -34,6 +33,15 @@ void drawBorderRects(void) {
     }
 }
 
+void drawGrid(void) {
+    SDL_SetRenderDrawColor(app.renderer, 255, 255, 255, 255);
+    for (int i = 0; i < SCREEN_DIVISOR; i++) {
+        for (int j = 0; j < SCREEN_DIVISOR; j++) {
+            drawRect(i*RECT_WIDTH, j*RECT_HEIGHT);
+        }
+    }
+}
+
 void drawVertLine(int x, int y, int h) {
     SDL_RenderDrawLine(app.renderer, x, y, x, y+h);
 }
@@ -57,8 +65,24 @@ void drawVerticalTrapezoid(
 
 void presentScene(void)
 {   
+    drawGrid();
+
+    SDL_SetRenderDrawColor(app.renderer, 0, 0, 0, 255);
+    SDL_Rect top;
+    top.x = 0;
+    top.y = 0;
+    top.w = SCREEN_WIDTH;
+    top.h = RECT_HEIGHT;
+    SDL_RenderFillRect(app.renderer, &top);
+
+    SDL_Rect bottom;
+    bottom.x = 0;
+    bottom.y = SCREEN_HEIGHT-RECT_HEIGHT;
+    bottom.w = SCREEN_WIDTH;
+    bottom.h = RECT_HEIGHT;
+    SDL_RenderFillRect(app.renderer, &bottom);
+
     SDL_SetRenderDrawColor(app.renderer, 96, 0, 0, 255);
-    drawBorderRects();
 
     drawVerticalTrapezoid(
         0, 0,             RECT_WIDTH, RECT_HEIGHT,
@@ -69,21 +93,15 @@ void presentScene(void)
         SCREEN_WIDTH-RECT_WIDTH, SCREEN_HEIGHT-RECT_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT
     );
 
-    SDL_GetMouseState(
-        &mouse_position.x,
-        &mouse_position.y
-    );
 
     SDL_Rect rect;
-    rect.x = mouse_position.x;
-    rect.y = mouse_position.y;
+    rect.x = MOUSE_POSITION.x;
+    rect.y = MOUSE_POSITION.y;
     rect.w = RECT_WIDTH;
     rect.h = RECT_HEIGHT;
 
     SDL_RenderDrawRect(app.renderer, &rect);
-    SDL_Log("Mouse position: x=%i y=%i",
-        mouse_position.x, mouse_position.y
-    );
+
 
     SDL_RenderPresent(app.renderer);
 }

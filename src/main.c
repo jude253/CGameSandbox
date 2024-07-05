@@ -5,11 +5,6 @@
 #include "input.h"
 #include "defs.h"
 
-void handleFps(Uint64 frameStart, Uint64 frameEnd) {
-
-    
-}
-
 void handleFrameStart(void) {
     Uint64 frameStart = SDL_GetPerformanceCounter();
     float frameStartToStartSeconds = (float)(frameStart - app.frameStart) / 
