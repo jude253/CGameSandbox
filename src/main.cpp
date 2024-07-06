@@ -9,6 +9,9 @@ void handleFrameStart(void) {
     Uint64 frameStart = SDL_GetPerformanceCounter();
     float frameStartToStartSeconds = (float)(frameStart - app.frameStart) / 
                                      (float)SDL_GetPerformanceFrequency();
+
+    app.secondsElapsed = (Uint64)((float)(frameStart - app.frameStart) / 
+                                  (float)SDL_GetPerformanceFrequency());
     
     // Calculate fps from frame start to frame start. Hopefully this
     // will allow accurate frame calculation also in emscripten on web.

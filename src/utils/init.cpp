@@ -1,9 +1,18 @@
-
 #include <SDL2/SDL.h>
 #include "defs.h"
 #include "structs.h"
+#include "gameObjects/clickSquare.h"
+#include "common.h"
 
 App app;
+
+Color RED                =   {.r = 255, .g=0,   .b=0,   .a=255};
+Color DARK_RED           =   {.r = 96,  .g=0,   .b=0,   .a=255};
+Color BLUE               =   {.r = 0,   .g=0,   .b=255, .a=255};
+Color GREEN              =   {.r = 0,   .g=255, .b=0,   .a=255};
+Color WHITE              =   {.r = 255, .g=255, .b=255, .a=255};
+Color BLACK              =   {.r = 0,   .g=0,   .b=0,   .a=255};
+Color BACKGROUND_COLOR   =   {.r = 96,  .g=128, .b=255, .a=255};
 
 void initSDL(void)
 {
@@ -14,9 +23,17 @@ void initSDL(void)
     windowFlags = 0;
 
     // Initialize app data before game starts.
-    app.frameStart = 0;
+    app.gameStart = SDL_GetPerformanceCounter();
+    app.frameStart = app.gameStart;
+    app.secondsElapsed = 0;
     app.renderFrameSeconds = 0.0f;
     app.fps = 0.0f;
+
+    for (int i = 0; i < 10; i++) {
+        SDL_Point point = getRandomPoint();
+        ClickSquare cs = createClickSquare(point.x, point.y, 100, BLUE);
+        CLICK_SQUARES_LIST.push_back(cs);
+    }
     
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {

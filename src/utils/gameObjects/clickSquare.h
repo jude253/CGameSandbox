@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include "../structs.h"
+#include <vector>
 
 class ClickSquare {
 
@@ -14,3 +15,10 @@ public:
     Uint64 drawTime;  // Draw time-- intended to be set by SDL_GetPerformanceCounter()
 
 };
+
+void drawClickSquare(App app, ClickSquare clickSquare);
+ClickSquare createClickSquare(int x, int y, int l, Color color);
+
+extern std::vector<ClickSquare> CLICK_SQUARES_LIST;
+
+bool deleteClickSquareIfClicked(App app);
