@@ -1,13 +1,9 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include <math.h>
 
 
-
-/*
-Run with:
-gcc src/test.c -o test.out && ./test.out
-*/
-int main() {
+void printfExamples() {
     int a = 120;
     int b = 65;
     float float_a_b = (float)a/b;
@@ -31,5 +27,28 @@ int main() {
     // Prints whatever happened to be in that location of memory before:
     float uninitialized_float;
     printf("Uninitialized float: %f\n", uninitialized_float);
+}
+
+
+typedef struct {
+    bool defined;
+    float x;
+    float y;
+} Point;
+
+void printPoint(Point point) {
+    printf("(%f, %f), defined=%d\n", point.x, point.y, point.defined);
+}
+
+Point LIST_OF_POINTS[100];
+
+/*
+Run with:
+gcc test/test.cpp -o test.out && ./test.out
+*/
+int main() {
+    for (int i = 0; i < 100; i++) {
+        printPoint(LIST_OF_POINTS[i]);
+    }
     return 0;
 }

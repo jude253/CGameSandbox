@@ -2,6 +2,6 @@
 
 #include "structs.h"
 
-App app;
-
 void initSDL(void);
+
+extern App app;

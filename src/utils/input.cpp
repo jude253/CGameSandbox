@@ -1,16 +1,14 @@
 #include <SDL2/SDL.h>
 #include "init.h"
 
-SDL_Point MOUSE_POSITION;
-
 void doInput(void)
 {
     SDL_GetMouseState(
-        &MOUSE_POSITION.x,
-        &MOUSE_POSITION.y
+        &app.mousePosition.x,
+        &app.mousePosition.y
     );
     SDL_Log("Mouse position: x=%i y=%i",
-        MOUSE_POSITION.x, MOUSE_POSITION.y
+        app.mousePosition.x, app.mousePosition.y
     );
 
     SDL_Event event;

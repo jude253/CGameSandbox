@@ -1,9 +1,9 @@
 
 #include <string.h>
-#include "init.h"
-#include "draw.h"
-#include "input.h"
-#include "defs.h"
+#include "utils/init.h"
+#include "utils/draw.h"
+#include "utils/input.h"
+#include "utils/defs.h"
 
 void handleFrameStart(void) {
     Uint64 frameStart = SDL_GetPerformanceCounter();
@@ -13,6 +13,7 @@ void handleFrameStart(void) {
     // Calculate fps from frame start to frame start. Hopefully this
     // will allow accurate frame calculation also in emscripten on web.
     app.fps = 1.0f/frameStartToStartSeconds;
+    SDL_Log("FPS=%f", app.fps);
 
     // Overwrite previous frame start with current frame start
     app.frameStart = frameStart;
@@ -59,7 +60,6 @@ int main(int argc, char *argv[])
 
     while(1)
     {
-        SDL_Log("FPS=%f", app.fps);
         renderFrame();
     }
 
