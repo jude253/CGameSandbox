@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include "SDL.h"
 #include "init.h"
 #include "defs.h"
 #include "input.h"

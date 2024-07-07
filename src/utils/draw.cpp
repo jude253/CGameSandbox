@@ -1,10 +1,10 @@
-#include <SDL2/SDL.h>
+#include "SDL.h"
 #include "init.h"
 #include "drawHelperFunctions.h"
 #include "defs.h"
 #include "input.h"
 #include "gameObjects/clickSquare.h"
-#include "SDL_ttf.h"
+// #include "SDL_ttf.h"
 
 void drawDebugGrid(void) {
     setRenderDrawColor(WHITE);

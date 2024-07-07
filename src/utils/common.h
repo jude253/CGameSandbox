@@ -1,4 +1,4 @@
 #pragma once
-#include <SDL2/SDL.h>
+#include "SDL.h"
 
 SDL_Point getRandomPoint(void);
