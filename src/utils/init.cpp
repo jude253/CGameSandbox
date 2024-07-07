@@ -1,10 +1,12 @@
-#include <SDL2/SDL.h>
+#include <SDL.h>
+#include <SDL_ttf.h>
 #include "defs.h"
 #include "structs.h"
 #include "gameObjects/clickSquare.h"
 #include "common.h"
 
 App app;
+TTF_Font *font;
 
 Color RED                =   {.r = 255, .g=0,   .b=0,   .a=255};
 Color DARK_RED           =   {.r = 96,  .g=0,   .b=0,   .a=255};
@@ -39,6 +41,18 @@ void initSDL(void)
     {
         printf("Couldn't initialize SDL: %s\n", SDL_GetError());
         exit(1);
+    }
+
+    if (TTF_Init() < 0)
+    {
+        printf("Couldn't initialize SDL_ttf: %s\n", TTF_GetError());
+        exit(1);
+    }
+
+    font = TTF_OpenFont("include/fonts/SourceCodePro-Regular.ttf", 24);
+    if (!font){
+        printf("Unable to get font: %s\n", TTF_GetError());
+        return;
     }
 
     app.window = SDL_CreateWindow("CGameSandbox", SDL_WINDOWPOS_UNDEFINED,

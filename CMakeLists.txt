@@ -20,21 +20,39 @@ set(DIST_DIR          ${BUILD_ROOT_DIR}/dist       CACHE STRING "DIST_DIR")
 message("CMAKE_CURRENT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 message("CMAKE_CURRENT_BINARY_DIR: ${CMAKE_CURRENT_BINARY_DIR}")
 
-
+set(CMAKE_PREFIX_PATH ${PROJECT_SOURCE_DIR}/include/)
 file(GLOB_RECURSE CPP_SOURCE ${PROJECT_ROOT_DIR}/src/*.cpp)
-
 
 
 option(USE_EMSCRIPTEN "Use emscripten to compile for WASM. Docs: https://emscripten.org/docs" OFF)
 
-if (NOT USE_EMSCRIPTEN)  # Normal compilation:
+if (NOT USE_EMSCRIPTEN)
+  # This will currently only work on the MacOS:
   message("Not compiling for WASM")
-  find_package(SDL2 REQUIRED)
-  include_directories(CGameSandbox ${SDL2_INCLUDE_DIRS})
 
+  # Find SDL and SDL_ttf
+  find_package(SDL2 CONFIG REQUIRED)
+  find_package(SDL2_ttf CONFIG REQUIRED)
+  get_target_property(SDL2_ttf_INCLUDE_DIRS SDL2_ttf::SDL2_ttf INTERFACE_INCLUDE_DIRECTORIES)
+  
   message("SDL2_INCLUDE_DIRS: ${SDL2_INCLUDE_DIRS}")
+  message("SDL2_ttf_INCLUDE_DIRS: ${SDL2_ttf_INCLUDE_DIRS}")
+
+  include_directories(CGameSandbox ${SDL2_INCLUDE_DIRS} ${SDL2_ttf_INCLUDE_DIRS})
+
   add_executable(${EXECUTABLE_NAME} ${CPP_SOURCE})
-  target_link_libraries(${EXECUTABLE_NAME} ${SDL2_LIBRARIES})
+  target_link_libraries(${EXECUTABLE_NAME} PRIVATE SDL2::SDL2 SDL2_ttf::SDL2_ttf)
+  set_target_properties(${EXECUTABLE_NAME} PROPERTIES 
+    RUNTIME_OUTPUT_DIRECTORY "${DIST_DIR}"
+  )
+
+  # Copy font file.  It would be nice to be able to copy the entire directoy
+  configure_file(
+    "${PROJECT_ROOT_DIR}/include/fonts/SourceCodePro-Regular.ttf" 
+    "${DIST_DIR}/include/fonts/SourceCodePro-Regular.ttf" 
+    COPYONLY
+  )
+  
 
 else()
   # There must be a cleaner way to do this, but I can't figure out how
@@ -42,7 +60,7 @@ else()
   # without using a custom command.
 
   message("Compiling for WASM")
-  set(EMSCRIPTEN_ROOT_DIR ${PROJECT_ROOT_DIR}/emsdk/upstream/emscripten 
+  set(EMSCRIPTEN_ROOT_DIR ${PROJECT_ROOT_DIR}/include/emsdk/upstream/emscripten 
     CACHE STRING "EMSCRIPTEN_ROOT_DIR"
   )
   set(EMCC ${EMSCRIPTEN_ROOT_DIR}/emcc CACHE STRING "EMCC")
@@ -57,7 +75,7 @@ else()
     OUTPUT ${EXECUTABLE_NAME}.html ${EXECUTABLE_NAME}.js ${EXECUTABLE_NAME}.wasm
     COMMAND rm -rf ${DIST_DIR}
     COMMAND mkdir  ${DIST_DIR}
-    COMMAND ${EMCC} ${CPP_SOURCE} --use-port=sdl2 --use-port=sdl2_ttf -o ${DIST_DIR}/${EXECUTABLE_NAME}.html
+    COMMAND ${EMCC} ${CPP_SOURCE} --use-port=sdl2 --use-port=sdl2_ttf --embed-file=${PROJECT_ROOT_DIR}/include/fonts/@/include/fonts/ -o ${DIST_DIR}/${EXECUTABLE_NAME}.html
     VERBATIM
   )
   add_custom_target(CGameSandbox

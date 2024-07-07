@@ -26,8 +26,17 @@ This project is a sandbox for me to learn CMake, SDL and C/C++ better.
 git clone --recurse-submodules https://github.com/jude253/CGameSandbox.git
 ```
 
-To setup up Emscripten, follow these instructions starting at `cd emsdk`: https://emscripten.org/docs/getting_started/downloads.html#installation-instructions-using-the-emsdk-recommended,
+To intially setup up Emscripten:
 
+```
+cd include/emsdk
+
+./emsdk install latest
+
+./emsdk activate latest
+```
+
+Next, build the project for WASM one time using the instructions below.
 
 ## Build Commands
 
@@ -75,7 +84,7 @@ cmake -DUSE_EMSCRIPTEN=OFF ..
 Run once to enable emscripten commands in shell session:
 
 ```
-source ./emsdk/emsdk_env.sh
+source ./include/emsdk/emsdk_env.sh
 ```
 
 From `/build` run:
@@ -90,12 +99,12 @@ Docs: https://emscripten.org/docs/compiling/Running-html-files-with-emrun.html#r
 ## Start Game
 
 ```
-./build/game
+./build/dist/game
 ```
 
 ## One Line Command
 
 Run from `build` directory
 ```
-cmake .. && make && ./game
+cmake .. && make && ./dist/game
 ```
