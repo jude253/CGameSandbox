@@ -5,6 +5,10 @@ This project is a sandbox for me to learn CMake, SDL and C/C++ better.
 - CMake
   - Docs: https://cmake.org/
   - Installation: https://github.com/Kitware/CMake?tab=readme-ov-file#unixmac-osxmingwmsyscygwin
+- Emscripten
+  - Docs: https://emscripten.org/
+  - Source Code: https://github.com/emscripten-core/emsdk
+  - Installation: https://emscripten.org/docs/getting_started/downloads.html
 - SDL2
   - Docs: https://www.libsdl.org/
   - Source Code: https://github.com/libsdl-org/SDL/tree/SDL2
@@ -13,6 +17,16 @@ This project is a sandbox for me to learn CMake, SDL and C/C++ better.
 
 ## Helpful Resources
 - https://wiki.libsdl.org/SDL2/Tutorials
+- https://git-scm.com/book/en/v2/Git-Tools-Submodules
+
+## Initial Project Setup
+
+```
+# Clone repo and submodules:
+git clone --recurse-submodules https://github.com/jude253/CGameSandbox.git
+```
+
+To setup up Emscripten, follow these instructions starting at `cd emsdk`: https://emscripten.org/docs/getting_started/downloads.html#installation-instructions-using-the-emsdk-recommended,
 
 
 ## Build Commands
@@ -47,9 +61,26 @@ cmake -DUSE_EMSCRIPTEN=ON ..
 NOTE: If you switch back to normal building, use this command for the 
 first time to disable the cached key:
 
-````
+```
 cmake -DUSE_EMSCRIPTEN=OFF ..
 ```
+
+## Start Game WASM
+
+Run once to enable emscripten commands in shell session:
+
+```
+source ./emsdk/emsdk_env.sh
+```
+
+From `/build` run:
+
+```
+emrun dist/game.html
+```
+
+Docs: https://emscripten.org/docs/compiling/Running-html-files-with-emrun.html#running-html-files-with-emrun
+
 
 ## Start Game
 
