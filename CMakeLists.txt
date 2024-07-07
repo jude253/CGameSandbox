@@ -5,31 +5,67 @@ endif()
 
 cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 project(CGameSandbox VERSION 0.1.0 LANGUAGES C CXX)
+set(EXECUTABLE_NAME "game" CACHE STRING "EXECUTABLE_NAME")
 
 # specify the C++ standard
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-find_package(SDL2 REQUIRED)
-include_directories(CGameSandbox ${SDL2_INCLUDE_DIRS})
-
-message("CMAKE_CURRENT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
-message("CMAKE_CURRENT_BINARY_DIR: ${CMAKE_CURRENT_BINARY_DIR}")
-message("SDL2_INCLUDE_DIRS: ${SDL2_INCLUDE_DIRS}")
 
 set(PROJECT_ROOT_DIR  ${PROJECT_SOURCE_DIR}        CACHE STRING "PROJECT_ROOT_DIR")
 set(BUILD_ROOT_DIR    ${CMAKE_CURRENT_BINARY_DIR}  CACHE STRING "BUILD_ROOT_DIR")
 set(DIST_DIR          ${BUILD_ROOT_DIR}/dist       CACHE STRING "DIST_DIR")
 
+
+message("CMAKE_CURRENT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
+message("CMAKE_CURRENT_BINARY_DIR: ${CMAKE_CURRENT_BINARY_DIR}")
+
+
 file(GLOB_RECURSE CPP_SOURCE ${PROJECT_ROOT_DIR}/src/*.cpp)
 
-add_executable(game ${CPP_SOURCE})
-target_link_libraries(game ${SDL2_LIBRARIES})
-# add_custom_command(
-#   OUTPUT game.out
-#   COMMAND rm -rf ${DIST_DIR}
-#   COMMAND mkdir  ${DIST_DIR}
-#   COMMAND g++ ${CPP_SOURCE} -o ${DIST_DIR}/game.out -lSDL2
-#   VERBATIM
-# )
-# add_custom_target(CGameSandbox ALL DEPENDS game.out)
+
+
+option(USE_EMSCRIPTEN "Use emscripten to compile for WASM. Docs: https://emscripten.org/docs" OFF)
+
+if (NOT USE_EMSCRIPTEN)  # Normal compilation:
+  message("Not compiling for WASM")
+  find_package(SDL2 REQUIRED)
+  include_directories(CGameSandbox ${SDL2_INCLUDE_DIRS})
+
+  message("SDL2_INCLUDE_DIRS: ${SDL2_INCLUDE_DIRS}")
+  add_executable(${EXECUTABLE_NAME} ${CPP_SOURCE})
+  target_link_libraries(${EXECUTABLE_NAME} ${SDL2_LIBRARIES})
+
+else()
+  # There must be a cleaner way to do this, but I can't figure out how
+  # to get `--use-port=sdl2` to be included in the compile commands
+  # without using a custom command.
+
+  message("Compiling for WASM")
+  set(EMSCRIPTEN_ROOT_DIR ${PROJECT_ROOT_DIR}/emsdk/upstream/emscripten 
+    CACHE STRING "EMSCRIPTEN_ROOT_DIR"
+  )
+  set(EMCC ${EMSCRIPTEN_ROOT_DIR}/emcc CACHE STRING "EMCC")
+  set(CMAKE_TOOLCHAIN_FILE 
+      ${EMSCRIPTEN_ROOT_DIR}/emscripten/cmake/Modules/Platform/Emscripten.cmake  
+      CACHE STRING "CMAKE_TOOLCHAIN_FILE"
+  )
+  message("EMSCRIPTEN_ROOT_DIR: ${EMSCRIPTEN_ROOT_DIR}")
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "CMAKE_BUILD_TYPE")
+
+  add_custom_command(
+    OUTPUT ${EXECUTABLE_NAME}.html ${EXECUTABLE_NAME}.js ${EXECUTABLE_NAME}.wasm
+    COMMAND rm -rf ${DIST_DIR}
+    COMMAND mkdir  ${DIST_DIR}
+    COMMAND ${EMCC} ${CPP_SOURCE} --use-port=sdl2 --use-port=sdl2_ttf -o ${DIST_DIR}/${EXECUTABLE_NAME}.html
+    VERBATIM
+  )
+  add_custom_target(CGameSandbox
+    ALL DEPENDS
+    ${EXECUTABLE_NAME}.html
+    ${EXECUTABLE_NAME}.js
+    ${EXECUTABLE_NAME}.wasm
+  )
+
+endif()
+

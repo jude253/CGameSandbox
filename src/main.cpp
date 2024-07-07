@@ -4,6 +4,11 @@
 #include "utils/draw.h"
 #include "utils/input.h"
 #include "utils/defs.h"
+#include <SDL2/SDL.h>
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 
 void handleFrameStart(void) {
     Uint64 frameStart = SDL_GetPerformanceCounter();
@@ -60,11 +65,10 @@ int main(int argc, char *argv[])
     initSDL();
 
     // atexit(cleanup);
-
-    while(1)
-    {
-        renderFrame();
-    }
-
+    #ifdef __EMSCRIPTEN__
+    emscripten_set_main_loop(renderFrame, 0, 1);
+    #else
+    while (1) { renderFrame(); }
+    #endif
     return 0;
 }

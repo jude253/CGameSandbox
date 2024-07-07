@@ -30,11 +30,26 @@ make
 
 ```
 
-Use this command instead of `make` for more debug output:
+Alternatively, use this command instead of `make`:
 ```
 cmake --build .
 ```
 
+## Build with Emscripten for WASM
+
+Use the same commands as above, but replace `cmake ..` with this:
+
+```
+cmake -DUSE_EMSCRIPTEN=ON ..
+```
+
+
+NOTE: If you switch back to normal building, use this command for the 
+first time to disable the cached key:
+
+````
+cmake -DUSE_EMSCRIPTEN=OFF ..
+```
 
 ## Start Game
 

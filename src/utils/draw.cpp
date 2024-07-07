@@ -1,4 +1,4 @@
-#include "SDL.h"
+#include <SDL2/SDL.h>
 #include "init.h"
 #include "drawHelperFunctions.h"
 #include "defs.h"
