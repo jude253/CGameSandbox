@@ -30,11 +30,10 @@ void initSDL(void)
     app.secondsElapsed = 0;
     app.renderFrameSeconds = 0.0f;
     app.fps = 0.0f;
+    app.squaresClickedCount = 0;
 
     for (int i = 0; i < 10; i++) {
-        SDL_Point point = getRandomPoint();
-        ClickSquare cs = createClickSquare(point.x, point.y, 100, BLUE);
-        CLICK_SQUARES_LIST.push_back(cs);
+        CLICK_SQUARES_LIST.push_back(createRandomClickSquare());
     }
     
     if (SDL_Init(SDL_INIT_VIDEO) < 0)

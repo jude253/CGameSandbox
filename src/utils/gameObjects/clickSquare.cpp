@@ -3,6 +3,9 @@
 #include "../drawHelperFunctions.h"
 #include <vector>
 #include <stdbool.h>
+#include "../common.h"
+#include "../init.h"
+#include "../defs.h"
 
 class ClickSquare {
 
@@ -36,12 +39,24 @@ void drawClickSquare(App app, ClickSquare clickSquare) {
     SDL_RenderFillRect(app.renderer, &clickSquare.drawRect);
 }
 
-bool deleteClickSquareIfClicked(App app) {
+ClickSquare createRandomClickSquare() {
+    SDL_Point point = getRandomPoint();
+    int length = GRID_HEIGHT;
+    int rand_x = randIntInRange(GRID_WIDTH, SCREEN_WIDTH-GRID_WIDTH-length);
+    int rand_y = randIntInRange(GRID_HEIGHT, SCREEN_HEIGHT-GRID_HEIGHT-length);
+    ClickSquare cs = createClickSquare(rand_x, rand_y, GRID_HEIGHT, BLUE);
+    return cs;
+}
+
+bool deleteClickSquareIfClicked() {
     for (int i=0; i<CLICK_SQUARES_LIST.size(); i++) {
         ClickSquare cs = CLICK_SQUARES_LIST[i];
         if (SDL_PointInRect(&app.mousePosition, &cs.drawRect)) {
             SDL_Log("CLICKED RECTANGLE!");
             CLICK_SQUARES_LIST.erase(CLICK_SQUARES_LIST.begin() + i );
+            app.squaresClickedCount = app.squaresClickedCount + 1;
+            SDL_Log("squaresClickedCount: %i", (int)app.squaresClickedCount);
+            CLICK_SQUARES_LIST.push_back(createRandomClickSquare());
             return 1;
         }
     }

@@ -32,7 +32,7 @@ void doInput(void)
                 SDL_Log("Mouse position: x=%i y=%i",
                     app.mousePosition.x, app.mousePosition.y
                 );
-                deleteClickSquareIfClicked(app);
+                deleteClickSquareIfClicked();
                 break;
             default:
                 break;

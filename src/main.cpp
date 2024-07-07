@@ -21,7 +21,7 @@ void handleFrameStart(void) {
     // Calculate fps from frame start to frame start. Hopefully this
     // will allow accurate frame calculation also in emscripten on web.
     app.fps = 1.0f/frameStartToStartSeconds;
-    SDL_Log("FPS=%f", app.fps);
+    // SDL_Log("FPS=%f", app.fps);
 
     // Overwrite previous frame start with current frame start
     app.frameStart = frameStart;

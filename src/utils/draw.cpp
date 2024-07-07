@@ -5,6 +5,7 @@
 #include "defs.h"
 #include "input.h"
 #include "gameObjects/clickSquare.h"
+#include <string>
 
 void drawDebugGrid(void) {
     setRenderDrawColor(WHITE);
@@ -58,20 +59,31 @@ void prepareScene(void)
 }
 
 
-void renderText(void) {
-
+void renderText(int x, int y, std::string text) {
     SDL_Color white = {255, 255, 255};
-    SDL_Surface *surface = TTF_RenderText_Solid(font, "Hello World", white);
+    SDL_Surface *surface = TTF_RenderText_Solid(font, text.c_str(), white);
     SDL_Texture *texture = SDL_CreateTextureFromSurface(app.renderer, surface);
     int textWidth = surface->w;
     int textHeight = surface->h;
     SDL_FreeSurface(surface);
     SDL_Rect rect;
-    rect.x = 0;
-    rect.y = 0;
+    rect.x = x;
+    rect.y = y;
     rect.w = textWidth;
     rect.h = textHeight;
     SDL_RenderCopy(app.renderer, texture, NULL, &rect);
+}
+
+void renderFPS(void) {
+    std::string writeOnScreen = "FPS=";
+    writeOnScreen.append(std::to_string((int)app.fps));
+    renderText(0, SCREEN_HEIGHT-GRID_HEIGHT, writeOnScreen);
+}
+
+void renderSquaresClicked(void) {
+    std::string writeOnScreen ="Squares Clicked=";
+    writeOnScreen.append(std::to_string((int)app.squaresClickedCount));
+    renderText(0, 0, writeOnScreen);
 }
 
 void presentScene(void)
@@ -91,6 +103,7 @@ void presentScene(void)
         drawClickSquare(app, cs);
     }
     drawBorder();
-    renderText();
+    renderFPS();
+    renderSquaresClicked();
     SDL_RenderPresent(app.renderer);
 }
