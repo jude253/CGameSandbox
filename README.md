@@ -57,6 +57,11 @@ Use the same commands as above, but replace `cmake ..` with this:
 cmake -DUSE_EMSCRIPTEN=ON ..
 ```
 
+NOTE: If you are running `make` for the first time since installing
+the emsdk, make sure the shell you run `make` in has not run 
+`source ./emsdk_env.sh` as this makes the caching of emscripten port
+libraries fail.  Run `source ./emsdk_env.sh` after running `make` the
+first time.
 
 NOTE: If you switch back to normal building, use this command for the 
 first time to disable the cached key:

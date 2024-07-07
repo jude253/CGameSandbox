@@ -80,10 +80,10 @@ void presentScene(void)
     drawDebugGrid();
     
     SDL_Rect mouse_rect;
-    mouse_rect.x = app.mousePosition.x;
-    mouse_rect.y = app.mousePosition.y;
-    mouse_rect.w = GRID_WIDTH;
-    mouse_rect.h = GRID_HEIGHT;
+    mouse_rect.x = app.mousePosition.x - 5;
+    mouse_rect.y = app.mousePosition.y - 5;
+    mouse_rect.w = 10;
+    mouse_rect.h = 10;
 
     SDL_RenderDrawRect(app.renderer, &mouse_rect);
     
