@@ -4,7 +4,7 @@
 #include "defs.h"
 #include "input.h"
 #include "gameObjects/clickSquare.h"
-
+#include "SDL_ttf.h"
 
 void drawDebugGrid(void) {
     setRenderDrawColor(WHITE);
@@ -57,6 +57,23 @@ void prepareScene(void)
     SDL_RenderClear(app.renderer);
 }
 
+
+// void renderText(void) {
+//     TTF_Font *font = TTF_OpenFont("src/utils/font/SourceCodePro-Regular.ttf", 24);
+
+//     SDL_Color white = {255, 255, 255};
+//     SDL_Surface *surface = TTF_RenderText_Solid(font, "Hello World", white);
+//     SDL_Texture *texture = SDL_CreateTextureFromSurface(app.renderer, surface);
+//     int textWidth = surface->w;
+//     int textHeight = surface->h;
+//     SDL_FreeSurface(surface);
+//     SDL_Rect rect;
+//     rect.x = 0;
+//     rect.y = 0;
+//     rect.w = textWidth;
+//     rect.h = textHeight;
+//     SDL_RenderCopy(app.renderer, texture, NULL, &rect);
+// }
 
 void presentScene(void)
 {   
