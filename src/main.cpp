@@ -64,8 +64,10 @@ int main(int argc, char *argv[])
 
     initSDL();
 
-    // atexit(cleanup);
+    // atexit(cleanup);  // <- I don't know what this is for... Maybe saving?
+    
     #ifdef __EMSCRIPTEN__
+    // Docs: https://emscripten.org/docs/api_reference/emscripten.h.html#c.emscripten_set_main_loop
     emscripten_set_main_loop(renderFrame, 0, 1);
     #else
     while (1) { renderFrame(); }

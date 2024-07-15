@@ -1,5 +1,18 @@
 ## Overview
 This project is a sandbox for me to learn CMake, SDL and C/C++ better.
+Also, it will serve as a "minimal working example" of a game that can
+run as WASM or an executable (at least on a mac/linux/unix based OS,
+until I can actually understand how to use CMake right).  I will then
+use this as a template so I can work on multiple similar projects
+without having to recreate this setup each time.  It uses Adobe Open
+Source fonts as a submodule to improve portabililty so fonts can be
+loaded in with a relative path.
+
+__NOTE:__ Running this initial game on mobile does not run smoothly.
+There is a long delay between when the screen is pressed and when the
+"click" is able to be processed by the game.  I am thinking it's
+probably best mainly aim to make games that work well on desktop b/c of
+this.
 
 ## Dependencies:
 - CMake
@@ -13,7 +26,9 @@ This project is a sandbox for me to learn CMake, SDL and C/C++ better.
   - Docs: https://www.libsdl.org/
   - Source Code: https://github.com/libsdl-org/SDL/tree/SDL2
   - Installation: https://wiki.libsdl.org/SDL2/Installation
-
+- adobe-fonts/source-code-pro
+  - Docs: https://github.com/adobe-fonts/source-code-pro/tree/main
+  - Source Code: https://github.com/adobe-fonts/source-code-pro
 
 ## Helpful Resources
 - https://wiki.libsdl.org/SDL2/Tutorials
